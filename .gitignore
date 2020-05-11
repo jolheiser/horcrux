@@ -1,0 +1,7 @@
+# GoLand
+.idea/
+
+# Binaries
+/horcrux*
+!horcrux.example.yml
+!horcrux.example.go
