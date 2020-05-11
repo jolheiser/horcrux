@@ -6,9 +6,10 @@ package main
 
 import (
 	"fmt"
+	"net/http"
+
 	"go.jolheiser.com/horcrux/config"
 	"go.jolheiser.com/horcrux/router"
-	"net/http"
 
 	"go.jolheiser.com/beaver"
 )

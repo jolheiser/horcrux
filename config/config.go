@@ -1,12 +1,13 @@
 package config
 
 import (
-	"go.jolheiser.com/beaver"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
+
+	"go.jolheiser.com/beaver"
+	"gopkg.in/yaml.v2"
 )
 
 var defaultConfig string

@@ -1,8 +1,9 @@
 package router
 
 import (
-	"github.com/go-chi/chi"
 	"go.jolheiser.com/horcrux/config"
+
+	"github.com/go-chi/chi"
 )
 
 var repoMap = make(map[string]config.RepoConfig)

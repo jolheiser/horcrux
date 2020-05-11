@@ -4,10 +4,11 @@ import (
 	"crypto/hmac"
 	"crypto/sha1"
 	"encoding/hex"
-	"go.jolheiser.com/beaver"
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	"go.jolheiser.com/beaver"
 )
 
 type GitHubPayload struct {

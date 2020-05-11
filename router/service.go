@@ -4,12 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/go-chi/chi"
-	"go.jolheiser.com/beaver"
-	"go.jolheiser.com/horcrux/service"
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	"go.jolheiser.com/horcrux/service"
+
+	"github.com/go-chi/chi"
+	"go.jolheiser.com/beaver"
 )
 
 func HandleService(w http.ResponseWriter, r *http.Request) {

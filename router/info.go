@@ -1,11 +1,12 @@
 package router
 
 import (
-	"github.com/go-chi/chi"
-	"go.jolheiser.com/beaver"
 	"html/template"
 	"net/http"
 	"strings"
+
+	"github.com/go-chi/chi"
+	"go.jolheiser.com/beaver"
 )
 
 var infoTmpl *template.Template
