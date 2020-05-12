@@ -15,6 +15,13 @@ import (
 )
 
 func main() {
+	beaver.Console.Format = beaver.FormatOptions{
+		TimePrefix:  true,
+		StackPrefix: true,
+		StackLimit:  15,
+		LevelPrefix: true,
+		LevelColor:  true,
+	}
 
 	cfg, err := config.Load()
 	if err != nil {

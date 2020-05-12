@@ -3,20 +3,21 @@ package router
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"github.com/go-git/go-git/v5"
-	gitConfig "github.com/go-git/go-git/v5/config"
-	gitHttp "github.com/go-git/go-git/v5/plumbing/transport/http"
-	"go.jolheiser.com/horcrux/config"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
 	"sync"
 
+	"go.jolheiser.com/horcrux/config"
 	"go.jolheiser.com/horcrux/service"
 
 	"github.com/go-chi/chi"
+	"github.com/go-git/go-git/v5"
+	gitConfig "github.com/go-git/go-git/v5/config"
+	gitHttp "github.com/go-git/go-git/v5/plumbing/transport/http"
 	"go.jolheiser.com/beaver"
 )
 
@@ -92,8 +93,11 @@ func gitSync(tmp, repoURL string, cfg config.RepoConfig) error {
 		if strings.EqualFold(svc.RepoURL, repoURL) {
 			continue
 		}
-		r, err := repo.CreateRemote(&gitConfig.RemoteConfig{
-			Name: fmt.Sprintf("horcrux-%d", idx),
+		svc := svc
+		remoteName := fmt.Sprintf("horcrux-%d", idx)
+		_, err := repo.CreateRemote(&gitConfig.RemoteConfig{
+			Name: remoteName,
+			URLs: []string{svc.RepoURL},
 		})
 		if err != nil {
 			beaver.Errorf("could not create remote: %v", err)
@@ -106,10 +110,11 @@ func gitSync(tmp, repoURL string, cfg config.RepoConfig) error {
 		}
 		wg.Add(1)
 		go func() {
-			if err := r.Push(&git.PushOptions{
-				Auth: auth,
-			}); err != nil {
-				beaver.Errorf("could not push to remote: %v", err)
+			if err := repo.Push(&git.PushOptions{
+				RemoteName: remoteName,
+				Auth:       auth,
+			}); err != nil && !errors.Is(err, git.NoErrAlreadyUpToDate) {
+				beaver.Errorf("could not push to %s: %v", svc.RepoURL, err)
 			}
 			wg.Done()
 		}()
