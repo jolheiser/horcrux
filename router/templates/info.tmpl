@@ -6,19 +6,19 @@
 <p><strong>Name:</strong> {{.Name}}</p>
 <dl>
     {{if .Gitea}}
-        <dt>Gitea</dt>
+        <dt><strong>Gitea</strong></dt>
         {{range .Gitea}}
             <dd><a href="{{.RepoURL}}">{{.HumanURL}}</a></dd>
         {{end}}
     {{end}}
     {{if .GitHub}}
-        <dt>GitHub</dt>
+        <dt><strong>GitHub</strong></dt>
         {{range .GitHub}}
             <dd><a href="{{.RepoURL}}">{{.HumanURL}}</a></dd>
         {{end}}
     {{end}}
     {{if .GitLab}}
-        <dt>GitLab</dt>
+        <dt><strong>GitLab</strong></dt>
         {{range .GitLab}}
             <dd><a href="{{.RepoURL}}">{{.HumanURL}}</a></dd>
         {{end}}

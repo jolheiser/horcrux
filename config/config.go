@@ -17,20 +17,23 @@ type Config struct {
 	RootURL      string       `yaml:"root_url"`
 	LogLevel     string       `yaml:"log_level"`
 	Repositories []RepoConfig `yaml:"repositories"`
-
-	WorkPath string `yaml:"-"`
 }
 
 type RepoConfig struct {
-	Name   string          `yaml:"name"`
-	Gitea  []ServiceConfig `yaml:"gitea"`
-	GitHub []ServiceConfig `yaml:"github"`
-	GitLab []ServiceConfig `yaml:"gitlab"`
+	Name   string           `yaml:"name"`
+	Gitea  []*ServiceConfig `yaml:"gitea"`
+	GitHub []*ServiceConfig `yaml:"github"`
+	GitLab []*ServiceConfig `yaml:"gitlab"`
+}
+
+func (rc RepoConfig) ServiceConfigs() []*ServiceConfig {
+	return append(rc.Gitea, append(rc.GitHub, rc.GitLab...)...)
 }
 
 type ServiceConfig struct {
 	RepoURL     string `yaml:"repo_url"`
 	Secret      string `yaml:"secret"`
+	Username    string `yaml:"username"`
 	AccessToken string `yaml:"access_token"`
 }
 
@@ -52,14 +55,6 @@ func Load() (*Config, error) {
 	configPath := path.Join(binDir, "horcrux.yml")
 	if os.Getenv("HORCRUX_CONFIG") != "" {
 		configPath = os.Getenv("HORCRUX_CONFIG")
-	}
-
-	workPath := path.Join(binDir, "work")
-	if os.Getenv("HORCRUX_WORK") != "" {
-		workPath = os.Getenv("HORCRUX_WORK")
-	}
-	if err := os.MkdirAll(workPath, os.ModePerm); err != nil {
-		return nil, err
 	}
 
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
@@ -87,7 +82,6 @@ func Load() (*Config, error) {
 	if err := yaml.Unmarshal(data, &cfg); err != nil {
 		return nil, err
 	}
-	cfg.WorkPath = workPath
 
 	beaver.Console.Level = beaver.ParseLevel(cfg.LogLevel)
 	return cfg, nil

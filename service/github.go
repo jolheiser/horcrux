@@ -12,7 +12,14 @@ import (
 )
 
 type GitHubPayload struct {
-	Ref string `json:"ref"`
+	Ref  string `json:"ref"`
+	Repo struct {
+		CloneURL string `json:"clone_url"`
+	} `json:"repository"`
+}
+
+func (g GitHubPayload) URL() string {
+	return g.Repo.CloneURL
 }
 
 func (g GitHubPayload) GitRef() string {
