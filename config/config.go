@@ -10,7 +10,11 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-var defaultConfig string
+var (
+	defaultConfig string
+
+	Version = "develop"
+)
 
 type Config struct {
 	Port         string       `yaml:"port"`

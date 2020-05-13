@@ -35,6 +35,6 @@ var routerTmpl = `package router
 import "html/template"
 
 func init() {
-	%sTmpl = template.Must(template.New("%s").Parse(` + "`" + `%s` + "`" + `))
+	%sTmpl = template.Must(template.New("%s").Funcs(funcMap()).Parse(` + "`" + `%s` + "`" + `))
 }
 `

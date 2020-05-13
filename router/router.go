@@ -1,6 +1,8 @@
 package router
 
 import (
+	"html/template"
+
 	"go.jolheiser.com/horcrux/config"
 
 	"github.com/go-chi/chi"
@@ -22,4 +24,12 @@ func New(cfg *config.Config) *chi.Mux {
 	})
 
 	return m
+}
+
+func funcMap() template.FuncMap {
+	return template.FuncMap{
+		"Version": func() string {
+			return config.Version
+		},
+	}
 }

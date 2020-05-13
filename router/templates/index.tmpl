@@ -3,12 +3,13 @@
     <title>Horcrux</title>
 </head>
 <body>
-<h1>Welcome to Horcrux</h1>
+<h1>Index</h1>
 <p>Configured repositories:</p>
 <ul>
     {{range .}}
         <li><a href="{{.Name}}">{{.Name}}</a></li>
     {{end}}
 </ul>
+<footer>Horcrux Version: <pre>{{Version}}</pre></footer>
 </body>
 </html>

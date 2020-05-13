@@ -3,7 +3,7 @@ package router
 import "html/template"
 
 func init() {
-	infoTmpl = template.Must(template.New("info").Parse(`<html lang="en">
+	infoTmpl = template.Must(template.New("info").Funcs(funcMap()).Parse(`<html lang="en">
 <head>
     <title>{{.Name}}</title>
 </head>
@@ -31,5 +31,6 @@ func init() {
     {{end}}
 </dl>
 </body>
+<footer>Horcrux Version: <pre>{{Version}}</pre></footer>
 </html>`))
 }
