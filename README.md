@@ -16,3 +16,11 @@ For an example config, check out [horcrux.example.yml](horcrux.example.yml)
 
 The format for a webhook endpoint is `https://horcrux.domain.tld/<name>/<service>` where `name` is the name of your
 configured repository and `service` is the type of service sending the webhook. (gitea, github, or gitlab)
+
+## Examples
+
+Check out this repository on
+
+* [Gitea](https://gitea.com/jolheiser/horcrux)
+* [GitHub](https://github.com/jolheiser/horcrux)
+* [GitLab](https://gitlab.com/jolheiser/horcrux)
