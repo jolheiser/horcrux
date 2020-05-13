@@ -13,6 +13,7 @@ import (
 
 type GitHubPayload struct {
 	Ref  string `json:"ref"`
+	Head string `json:"after"`
 	Repo struct {
 		CloneURL string `json:"clone_url"`
 	} `json:"repository"`
@@ -24,6 +25,10 @@ func (g GitHubPayload) URL() string {
 
 func (g GitHubPayload) GitRef() string {
 	return g.Ref
+}
+
+func (g GitHubPayload) GitHead() string {
+	return g.Head
 }
 
 func (g GitHubPayload) Validate(r *http.Request, secret string) bool {

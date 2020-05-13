@@ -11,6 +11,7 @@ import (
 // input: router/templates/<name>.tmpl
 // output: router/<name>_tmpl.go
 var templates = []string{
+	"index",
 	"info",
 }
 

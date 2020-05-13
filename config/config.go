@@ -14,7 +14,6 @@ var defaultConfig string
 
 type Config struct {
 	Port         string       `yaml:"port"`
-	RootURL      string       `yaml:"root_url"`
 	LogLevel     string       `yaml:"log_level"`
 	Repositories []RepoConfig `yaml:"repositories"`
 }

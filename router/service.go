@@ -21,6 +21,8 @@ import (
 	"go.jolheiser.com/beaver"
 )
 
+var headMap = make(map[string]string)
+
 func HandleService(w http.ResponseWriter, r *http.Request) {
 	nameParam := strings.ToLower(chi.URLParam(r, "name"))
 	repo, ok := repoMap[nameParam]
@@ -32,6 +34,11 @@ func HandleService(w http.ResponseWriter, r *http.Request) {
 	payload, err := getPayload(r, serviceParam)
 	if err != nil {
 		beaver.Error(err)
+		return
+	}
+
+	if !compareHead(nameParam, payload.GitHead()) {
+		beaver.Debugf("HEAD is still %s for %s", payload.GitHead(), nameParam)
 		return
 	}
 
@@ -78,6 +85,16 @@ func getPayload(r *http.Request, serviceParam string) (service.HorcruxPayload, e
 		return nil, fmt.Errorf("cannot unmarshal the request body: %s", err)
 	}
 	return payload, nil
+}
+
+func compareHead(serviceName, headSHA string) bool {
+	if sha, ok := headMap[serviceName]; ok {
+		if strings.EqualFold(sha, headSHA) {
+			return false
+		}
+	}
+	headMap[serviceName] = headSHA
+	return true
 }
 
 func gitSync(tmp, repoURL string, cfg config.RepoConfig) error {

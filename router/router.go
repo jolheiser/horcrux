@@ -15,6 +15,7 @@ func New(cfg *config.Config) *chi.Mux {
 	}
 
 	m := chi.NewMux()
+	m.Get("/", HandleIndex)
 	m.Route("/{name}", func(r chi.Router) {
 		r.Get("/", HandleInfo)
 		r.Post("/{service}", HandleService)

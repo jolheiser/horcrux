@@ -8,6 +8,7 @@ func init() {
     <title>{{.Name}}</title>
 </head>
 <body>
+<p><a href="../">back</a></p>
 <p><strong>Name:</strong> {{.Name}}</p>
 <dl>
     {{if .Gitea}}

@@ -11,3 +11,8 @@ a webhook to `horcrux`, which then clones and pushes those changes
 to any number of configured services.
 
 For an example config, check out [horcrux.example.yml](horcrux.example.yml)
+
+## Webhook Endpoints
+
+The format for a webhook endpoint is `https://horcrux.domain.tld/<name>/<service>` where `name` is the name of your
+configured repository and `service` is the type of service sending the webhook. (gitea, github, or gitlab)
