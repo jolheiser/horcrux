@@ -1,6 +1,10 @@
 package service
 
-import "net/http"
+import (
+	"go.jolheiser.com/beaver"
+	"io/ioutil"
+	"net/http"
+)
 
 type GiteaPayload struct {
 	Secret string `json:"secret"`
@@ -23,6 +27,13 @@ func (g GiteaPayload) GitHead() string {
 	return g.Head
 }
 
-func (g GiteaPayload) Validate(_ *http.Request, secret string) bool {
-	return g.Secret == secret
+func (g GiteaPayload) Validate(r *http.Request, secret string) bool {
+	defer r.Body.Close()
+	b, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		beaver.Errorf("Cannot read the request body: %s", err)
+		return false
+	}
+
+	return compareHMAC(secret, string(b), r.Header.Get("X-Gitea-Signature"))
 }

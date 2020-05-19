@@ -23,14 +23,14 @@ type Config struct {
 }
 
 type RepoConfig struct {
-	Name   string           `yaml:"name"`
-	Gitea  []*ServiceConfig `yaml:"gitea"`
-	GitHub []*ServiceConfig `yaml:"github"`
-	GitLab []*ServiceConfig `yaml:"gitlab"`
+	Name   string         `yaml:"name"`
+	Gitea  *ServiceConfig `yaml:"gitea"`
+	GitHub *ServiceConfig `yaml:"github"`
+	GitLab *ServiceConfig `yaml:"gitlab"`
 }
 
 func (rc RepoConfig) ServiceConfigs() []*ServiceConfig {
-	return append(rc.Gitea, append(rc.GitHub, rc.GitLab...)...)
+	return []*ServiceConfig{rc.Gitea, rc.GitHub, rc.GitLab}
 }
 
 type ServiceConfig struct {

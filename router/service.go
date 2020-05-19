@@ -23,7 +23,7 @@ import (
 
 var headMap = make(map[string]string)
 
-func HandleService(w http.ResponseWriter, r *http.Request) {
+func HandleService(_ http.ResponseWriter, r *http.Request) {
 	nameParam := strings.ToLower(chi.URLParam(r, "name"))
 	repo, ok := repoMap[nameParam]
 	if !ok {
@@ -31,9 +31,24 @@ func HandleService(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	serviceParam := strings.ToLower(chi.URLParam(r, "service"))
-	payload, err := getPayload(r, serviceParam)
+	payload, err := parsePayload(r, serviceParam)
 	if err != nil {
 		beaver.Error(err)
+		return
+	}
+
+	var secret string
+	switch serviceParam {
+	case "gitea":
+		secret = repo.Gitea.Secret
+	case "github":
+		secret = repo.GitHub.Secret
+	case "gitlab":
+		secret = repo.GitLab.Secret
+	}
+
+	if !payload.Validate(r, secret) {
+		beaver.Errorf("Invalid payload")
 		return
 	}
 
@@ -59,7 +74,7 @@ func HandleService(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func getPayload(r *http.Request, serviceParam string) (service.HorcruxPayload, error) {
+func parsePayload(r *http.Request, serviceParam string) (service.HorcruxPayload, error) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return nil, fmt.Errorf("cannot read the request body: %s", err)

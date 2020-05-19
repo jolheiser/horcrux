@@ -17,6 +17,11 @@ For an example config, check out [horcrux.example.yml](horcrux.example.yml)
 The format for a webhook endpoint is `https://horcrux.domain.tld/<name>/<service>` where `name` is the name of your
 configured repository and `service` is the type of service sending the webhook. (gitea, github, or gitlab)
 
+## What if I want to replicate to multiple Gitea instances?
+
+Create two configs for the same repository, with different names. Add a webhook for any alternate instance.  
+As you (or horcrux) pushes to an instance, it could kick off a webhook to any number of horcrux endpoints.
+
 ## Examples
 
 Check out this repository on

@@ -1,9 +1,6 @@
 package service
 
 import (
-	"crypto/hmac"
-	"crypto/sha1"
-	"encoding/hex"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -36,21 +33,13 @@ func (g GitHubPayload) Validate(r *http.Request, secret string) bool {
 	if gotHash[0] != "sha1" {
 		return false
 	}
-	defer r.Body.Close()
 
+	defer r.Body.Close()
 	b, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		beaver.Errorf("Cannot read the request body: %s", err)
 		return false
 	}
 
-	hash := hmac.New(sha1.New, []byte(secret))
-	if _, err := hash.Write(b); err != nil {
-		beaver.Errorf("Cannot compute the HMAC for request: %s", err)
-		return false
-	}
-
-	expectedHash := hex.EncodeToString(hash.Sum(nil))
-	beaver.Debugf("Expected Hash: %s", expectedHash)
-	return gotHash[1] == expectedHash
+	return compareHMAC(secret, string(b), gotHash[1])
 }
