@@ -2,7 +2,7 @@ package service
 
 import (
 	"crypto/hmac"
-	"crypto/sha1"
+	"crypto/sha256"
 	"encoding/hex"
 	"go.jolheiser.com/beaver"
 	"net/http"
@@ -16,7 +16,7 @@ type HorcruxPayload interface {
 }
 
 func compareHMAC(secret, payload, expectedHash string) bool {
-	hash := hmac.New(sha1.New, []byte(secret))
+	hash := hmac.New(sha256.New, []byte(secret))
 	if _, err := hash.Write([]byte(payload)); err != nil {
 		beaver.Errorf("Cannot compute the HMAC for request: %s", err)
 		return false

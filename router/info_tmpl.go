@@ -13,21 +13,15 @@ func init() {
 <dl>
     {{if .Gitea}}
         <dt><strong>Gitea</strong></dt>
-        {{range .Gitea}}
-            <dd><a href="{{.RepoURL}}">{{.HumanURL}}</a></dd>
-        {{end}}
+        <dd><a href="{{.RepoURL}}">{{.HumanURL}}</a></dd>
     {{end}}
     {{if .GitHub}}
         <dt><strong>GitHub</strong></dt>
-        {{range .GitHub}}
-            <dd><a href="{{.RepoURL}}">{{.HumanURL}}</a></dd>
-        {{end}}
+        <dd><a href="{{.RepoURL}}">{{.HumanURL}}</a></dd>
     {{end}}
     {{if .GitLab}}
         <dt><strong>GitLab</strong></dt>
-        {{range .GitLab}}
-            <dd><a href="{{.RepoURL}}">{{.HumanURL}}</a></dd>
-        {{end}}
+        <dd><a href="{{.RepoURL}}">{{.HumanURL}}</a></dd>
     {{end}}
 </dl>
 </body>

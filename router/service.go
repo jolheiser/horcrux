@@ -48,7 +48,7 @@ func HandleService(_ http.ResponseWriter, r *http.Request) {
 	}
 
 	if !payload.Validate(r, secret) {
-		beaver.Errorf("Invalid payload")
+		beaver.Errorf("Invalid payload from %s for %s", serviceParam, nameParam)
 		return
 	}
 
