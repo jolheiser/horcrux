@@ -6,25 +6,16 @@ import (
 )
 
 type Config struct {
+	Key      string
 	Interval Duration
 	Storage  string
 	Repos    []RepoConfig
 }
 
 type RepoConfig struct {
+	Name   string
 	Source string
-	Dest   []DestConfig
-}
-
-type DestConfig struct {
-	Forge DestForgeConfig
-	URL   string
-}
-
-type DestForgeConfig struct {
-	ForgeConfig
-	Name      string
-	TokenFile string
+	Dest   []string
 }
 
 type Duration time.Duration

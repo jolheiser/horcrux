@@ -1,19 +1,14 @@
-local hc = import 'horcrux.libsonnet';
 local repo(name) = {
+  name: name,
   source: 'https://git.jolheiser.com/' + name + '.git',
   dest: [
-    {
-      forge: hc.GitHub('jolheiser', 'secrets/gh', name),
-      url: 'https://github.com/jolheiser/' + name + '.git',
-    },
-    //{
-    //  forge: hc.Gitea('jolheiser', 'secrets/gt', name),
-    //  url: 'https://gitea.com/jolheiser/' + name + '.git',
-    //},
+    'git@github.com:jolheiser/' + name,
+    'git@tangled.sh:jolheiser.com/' + name,
   ],
 };
 {
-  interval: '1h',
+  key: '~/.ssh/horcrux',
+  interval: '15m',
   storage: '.horcrux',
   repos: [
     repo('horcrux'),
