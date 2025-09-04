@@ -61,31 +61,33 @@ func maine() error {
 		for {
 			slog.Debug("running sync...")
 			for _, r := range config.Repos {
-
-				// Check if we need to clone first
-				repoPath := filepath.Join(config.Storage, r.Name)
-				_, err := os.Stat(repoPath)
-				if err != nil {
-					if errors.Is(err, os.ErrNotExist) {
-						if err := git(config.Storage, "clone", "--mirror", r.Source, r.Name); err != nil {
-							slog.Error("could not clone repo", slog.String("repo", r.Source), slog.Any("err", err))
+				go func(r RepoConfig) {
+					// Check if we need to clone first
+					repoPath := filepath.Join(config.Storage, r.Name)
+					_, err := os.Stat(repoPath)
+					if err != nil {
+						if errors.Is(err, os.ErrNotExist) {
+							if err := git(config.Storage, "clone", "--mirror", r.Source, r.Name); err != nil {
+								slog.Error("could not clone repo", slog.String("repo", r.Source), slog.Any("err", err))
+							}
+						} else {
+							slog.Error("could not stat repo path", slog.Any("err", err))
 						}
-					} else {
-						slog.Error("could not stat repo path", slog.Any("err", err))
 					}
-				}
 
-				// Update from remote
-				if err := git(repoPath, "remote", "update", "--prune"); err != nil {
-					slog.Error("could not update repo", slog.String("repo", r.Source), slog.Any("err", err))
-				}
-
-				// Push
-				for _, dest := range r.Dest {
-					if err := git(repoPath, "push", "--mirror", "--force", dest); err != nil {
-						slog.Error("could not push repo", slog.String("repo", r.Source), slog.String("dest", dest), slog.Any("err", err))
+					// Update from remote
+					if err := git(repoPath, "remote", "update", "--prune"); err != nil {
+						slog.Error("could not update repo", slog.String("repo", r.Source), slog.Any("err", err))
 					}
-				}
+
+					// Push
+					for _, dest := range r.Dest {
+						slog.Debug("syncing repo", slog.String("repo", r.Source), slog.String("dest", dest))
+						if err := git(repoPath, "push", "--mirror", "--force", dest); err != nil {
+							slog.Error("could not push repo", slog.String("repo", r.Source), slog.String("dest", dest), slog.Any("err", err))
+						}
+					}
+				}(r)
 			}
 			<-ticker.C
 		}
