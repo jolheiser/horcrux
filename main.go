@@ -104,7 +104,7 @@ func sshGit(key string) func(string, ...string) error {
 	return func(dir string, args ...string) error {
 		cmd := exec.Command("git", args...)
 		cmd.Dir = dir
-		cmd.Env = append(os.Environ(), fmt.Sprintf(`GIT_SSH_COMMAND=ssh -i %s`, key))
+		cmd.Env = append(os.Environ(), fmt.Sprintf(`GIT_SSH_COMMAND=ssh -o "StrictHostKeyChecking no" -i %s`, key))
 		// cmd.Stdout = os.Stdout
 		// cmd.Stderr = os.Stderr
 		return cmd.Run()
