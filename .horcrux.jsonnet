@@ -12,5 +12,7 @@ local repo(name) = {
   storage: '.horcrux',
   repos: [
     repo('horcrux'),
+    repo('ugit'),
+    repo('helix.drv'),
   ],
 }
