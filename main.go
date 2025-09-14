@@ -11,6 +11,8 @@ import (
 	"os/exec"
 	"os/signal"
 	"path/filepath"
+	"strings"
+	"syscall"
 	"time"
 
 	"go.jolheiser.com/cuesonnet"
@@ -94,7 +96,7 @@ func maine() error {
 	}()
 
 	ch := make(chan os.Signal, 1)
-	signal.Notify(ch, os.Interrupt, os.Kill)
+	signal.Notify(ch, os.Interrupt, syscall.SIGTERM)
 	<-ch
 
 	return nil
@@ -105,9 +107,9 @@ func sshGit(key string) func(string, ...string) error {
 		cmd := exec.Command("git", args...)
 		cmd.Dir = dir
 		cmd.Env = append(os.Environ(), fmt.Sprintf(`GIT_SSH_COMMAND=ssh -o "StrictHostKeyChecking accept-new" -i %s`, key))
-		// cmd.Stdout = os.Stdout
-		// cmd.Stderr = os.Stderr
-		return cmd.Run()
+		out, err := cmd.Output()
+		slog.Debug("git command", slog.String("args", strings.Join(args, " ")), slog.String("output", string(out)))
+		return err
 	}
 }
 
